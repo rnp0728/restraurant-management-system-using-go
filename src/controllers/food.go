@@ -130,7 +130,7 @@ func CreateFood() gin.HandlerFunc {
 		}
 
 		food.CreatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		food.CreatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		food.UpdatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		food.ID = primitive.NewObjectID()
 		food.FoodId = food.ID.Hex()
 		var num = toFixed(*food.Price, 2)
@@ -184,7 +184,7 @@ func UpdateFood() gin.HandlerFunc {
 				ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 				return
 			}
-			updateObj = append(updateObj, bson.E{Key: "menu", Value: food.Price})
+			updateObj = append(updateObj, bson.E{Key: "menu_id", Value: food.MenuId})
 		}
 
 		food.UpdatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
@@ -193,7 +193,7 @@ func UpdateFood() gin.HandlerFunc {
 
 		upsert := true
 
-		opt := options.UploadOptions{
+		opt := options.UpdateOptions{
 			Upsert: &upsert,
 		}
 		result, err := menuCollection.UpdateOne(

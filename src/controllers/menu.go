@@ -144,7 +144,7 @@ func UpdateMenu() gin.HandlerFunc {
 
 		upsert := true
 
-		opt := options.UploadOptions{
+		opt := options.UpdateOptions{
 			Upsert: &upsert,
 		}
 		result, err := menuCollection.UpdateOne(curCtx, filter, bson.D{
