@@ -6,6 +6,7 @@ import (
 	"infinity/rms/database"
 	"infinity/rms/models"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -183,6 +184,7 @@ func UpdateFood() gin.HandlerFunc {
 				ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 				return
 			}
+			updateObj = append(updateObj, bson.E{Key: "menu", Value: food.Price})
 		}
 
 		food.UpdatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
@@ -214,9 +216,10 @@ func UpdateFood() gin.HandlerFunc {
 }
 
 func round(num float64) int {
-
+	return int(num * math.Copysign(0.5, num))
 }
 
 func toFixed(num float64, precision int) float64 {
-
+	output := math.Pow(10, float64(precision))
+	return float64(round(num * output)) / output
 }
