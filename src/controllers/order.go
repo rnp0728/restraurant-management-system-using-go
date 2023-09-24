@@ -118,6 +118,7 @@ func UpdateOrder() gin.HandlerFunc {
 			ctx.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
+			return
 		}
 		var updatedObj primitive.D
 
@@ -146,7 +147,7 @@ func UpdateOrder() gin.HandlerFunc {
 			Upsert: &upsert,
 		}
 		filter := bson.M{"order_id": orderId}
-		result, err := menuCollection.UpdateOne(
+		result, err := orderCollection.UpdateOne(
 			curCtx, filter, bson.D{
 				{Key: "$set", Value: updatedObj},
 			},
@@ -158,7 +159,7 @@ func UpdateOrder() gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"error": msg,
 			})
-
+			return
 		}
 		ctx.JSON(http.StatusOK, result)
 	}

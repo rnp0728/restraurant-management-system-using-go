@@ -6,7 +6,7 @@ import (
 )
 
 type OrderItem struct {
-	ID          primitive.ObjectID `bson:"_id"`
+	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Quantity    *string            `json:"quantity,omitempty" validate:"required,eq=S|eq=M|eq=L"`
 	UnitPrice   *float64           `json:"unit_price,omitempty"`
 	FoodID      *string            `json:"food_id,omitempty"`

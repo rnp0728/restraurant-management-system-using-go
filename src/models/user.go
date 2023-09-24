@@ -14,7 +14,7 @@ type User struct {
 	Phone        *string            `json:"phone,omitempty"`
 	Token        *string            `json:"token,omitempty"`
 	RefreshToken *string            `json:"refresh_token,omitempty"`
-	UserID       *string            `json:"user_id,omitempty"`
+	UserID       string            `json:"user_id,omitempty"`
 	CreatedAt    time.Time          `json:"created_at,omitempty"`
 	UpdatedAt    time.Time          `json:"updated_at,omitempty"`
 }
