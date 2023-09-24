@@ -209,7 +209,7 @@ func CreateOrderItem() gin.HandlerFunc {
 
 		orderItemsToBeInserted := []interface{}{}
 		order.TableID = orderItemPack.TableID
-		order_id := orderItemOrderCreator(order)
+		order_id := OrderItemOrderCreator(order)
 
 		for _, orderItem := range orderItemPack.OrderItems {
 			orderItem.OrderID = order_id
