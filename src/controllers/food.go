@@ -50,9 +50,12 @@ func GetFoods() gin.HandlerFunc {
 				Key: "$projeValue: ct", Value: bson.D{
 					{Key: "_id", Value: 0},
 					{Key: "total_count", Value: 1},
-					{Key: "food_items", Value: bson.D{{
-						Key: "$slice", Value: []interface{}{"$data", startIndex, recordPerPage}},
-					},
+					{
+						Key: "food_items", Value: bson.D{
+							{
+								Key: "$slice", Value: []interface{}{"$data", startIndex, recordPerPage},
+							},
+						},
 					},
 				},
 			},
@@ -88,7 +91,6 @@ func GetFood() gin.HandlerFunc {
 		var food models.Food
 
 		err := foodCollection.FindOne(curCtx, bson.M{"food_id": foodId}).Decode(&food)
-
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Error occured while fetching",
@@ -96,7 +98,6 @@ func GetFood() gin.HandlerFunc {
 		}
 
 		ctx.JSON(http.StatusOK, food)
-
 	}
 }
 
@@ -133,7 +134,7 @@ func CreateFood() gin.HandlerFunc {
 		food.UpdatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		food.ID = primitive.NewObjectID()
 		food.FoodId = food.ID.Hex()
-		var num = toFixed(*food.Price, 2)
+		num := toFixed(*food.Price, 2)
 		food.Price = &num
 
 		result, insertErr := foodCollection.InsertOne(curCtx, food)
@@ -174,11 +175,10 @@ func UpdateFood() gin.HandlerFunc {
 			updateObj = append(updateObj, bson.E{Key: "price", Value: food.Price})
 		}
 		if food.FoodImage != nil {
-			updateObj = append(updateObj, bson.E{Key: "food_image",Value: food.FoodImage})
+			updateObj = append(updateObj, bson.E{Key: "food_image", Value: food.FoodImage})
 		}
 		if food.MenuId != nil {
 			err := menuCollection.FindOne(curCtx, bson.M{"menu_id": food.MenuId}).Decode(&menu)
-
 			if err != nil {
 				msg := fmt.Sprintf("Menu was not found")
 				ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
@@ -202,7 +202,6 @@ func UpdateFood() gin.HandlerFunc {
 			},
 			&opt,
 		)
-
 		if err != nil {
 			msg := "Food update failed"
 			ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -211,7 +210,6 @@ func UpdateFood() gin.HandlerFunc {
 
 		}
 		ctx.JSON(http.StatusOK, result)
-
 	}
 }
 
@@ -221,5 +219,5 @@ func round(num float64) int {
 
 func toFixed(num float64, precision int) float64 {
 	output := math.Pow(10, float64(precision))
-	return float64(round(num * output)) / output
+	return float64(round(num*output)) / output
 }

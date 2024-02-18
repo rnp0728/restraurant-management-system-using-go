@@ -48,7 +48,6 @@ func GetOrder() gin.HandlerFunc {
 		var order models.Order
 
 		err := orderCollection.FindOne(curCtx, bson.M{"order_id": orderId}).Decode(&order)
-
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Error occured while fetching",
@@ -128,9 +127,8 @@ func UpdateOrder() gin.HandlerFunc {
 			err := orderCollection.FindOne(curCtx, bson.M{
 				"table_id": order.TableID,
 			}).Decode(&table)
-
 			if err != nil {
-				msg := fmt.Sprintf("Table was not found")
+				msg := "Table was not found"
 				ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 				return
 			}
@@ -153,7 +151,6 @@ func UpdateOrder() gin.HandlerFunc {
 			},
 			&opt,
 		)
-
 		if err != nil {
 			msg := "Order updation failed"
 			ctx.JSON(http.StatusInternalServerError, gin.H{
